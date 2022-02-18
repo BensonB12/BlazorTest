@@ -1,0 +1,113 @@
+﻿@page "/"
+
+<PageTitle>Magic Cards</PageTitle>
+
+<h1>Make a Magic Card</h1>
+@* <br>
+    <h3>Goals of the app</h3>
+    <dd>Play 2 player drafts</dd>
+    <dd>Import decks to arena</dd>
+    <dd>Import decks to Magic Online</dd>
+    <dt>Opponents to play against</dt>
+    <dd></dd> *@
+<label>Name</label><br />
+<input type='text' @bind=newCardName>Enter the card name<br />
+<input type='number' min="0" @bind=newManaCost>Enter the Mana cost (lands don't need this)<br />
+<input type='number' min="0" @bind=newLoyalty> This is only for Planeswalkers (loyalty)<br />
+<button @onclick="makeCreatureCard">Make Creature Card</button><br />
+<button @onclick="makeSpellCard">Make Spell Card</button><br />
+<button @onclick="makeLandCard">Make Land Card</button><br />
+<button @onclick="makePlaneswalkerCard">Make Planeswalker Card</button><br />
+<button @onclick="saveCards">Save Cards</button><br />
+
+<h2>Card List</h2>
+@if (cards.Count == 0)
+{
+    <p>No accounts in list.</p>
+}
+@foreach (var card in cards)
+{
+    <p>@card.Name: @card.ManaCost @if (card is Planeswalker)
+        { 
+            @card.Loyalty
+            ;
+        }
+    </p>
+}
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        foreach (var line in File.ReadAllLines("cards.txt"))
+        {
+            Card card;
+            if (line.Split(' ').Length > 2)
+            {
+                card = new Planeswalker(line, newManaCost, newLoyalty);
+            }
+            else
+            {
+                card = new CreatureCard(line, newManaCost);
+            }
+            cards.Add(card);
+        }
+    }
+    string newCardName;
+    int newManaCost;
+    int newLoyalty;
+    List<Card> cards = new();
+
+    private void makeCreatureCard()
+    {
+        var newCard = new CreatureCard(newCardName, newManaCost);
+        cards.Add(newCard);
+        newCardName = null;
+        newManaCost = 0;
+    }
+
+    private void makePlaneswalkerCard()
+    {
+        var newPlaneswalker = new Planeswalker(newCardName, newManaCost, newLoyalty);
+        cards.Add(newPlaneswalker);
+        newCardName = null;
+        newManaCost = 0;
+        newLoyalty = 0;
+    }
+
+    private void makeSpellCard()
+    {
+        var newSpell = new Spell(newCardName, newManaCost);
+        cards.Add(newSpell);
+        newCardName = null;
+        newManaCost = 0;
+        newLoyalty = 0;
+    }
+
+    private void makeLandCard()
+    {
+        var newLand = new Land(newCardName);
+        cards.Add(newLand);
+        newCardName = null;
+        newManaCost = 0;
+        newLoyalty = 0;
+    }
+
+    private void saveCards()
+    {
+        using (var writer = new StreamWriter("cards.txt"))
+        {
+            foreach (var card in cards)
+            {
+                writer.Write(card.Name + ": ");
+                writer.Write(card.ManaCost);
+                if (card is Planeswalker)
+                {
+                    writer.Write(" " + card.Loyalty);
+                }
+                writer.WriteLine();
+            }
+            writer.Close();
+        }
+    }
+}

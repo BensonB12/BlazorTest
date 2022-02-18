@@ -1,0 +1,21 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Card File Contents</h1>
+
+<button class="btn btn-primary" @onclick="showCards">Show Cards</button>
+@foreach(string line in contents)
+{
+    <p>@line</p>
+}
+
+@code {
+    private int currentCount = 0;
+    string[] contents;
+
+    private void showCards()
+    {
+        contents = File.ReadAllLines("cards.txt");
+    }
+}
