@@ -1,21 +1,34 @@
-﻿@page "/counter"
+﻿@page "/cardfile"
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>View Card File</PageTitle>
+
+
+@* <button class="btn btn-primary" @onclick="showCards">Show Cards</button><br />
+    <p>@contents</p> *@
 
 <h1>Card File Contents</h1>
 
-<button class="btn btn-primary" @onclick="showCards">Show Cards</button>
-@foreach(string line in contents)
+@if(contents == null)
 {
-    <p>@line</p>
+<p>Card list not loaded.</p>
+}
+else
+{
+    @foreach (var line in contents)
+    {
+        @line <br />
+    }
 }
 
 @code {
-    private int currentCount = 0;
     string[] contents;
 
-    private void showCards()
+    protected override void OnInitialized()
     {
-        contents = File.ReadAllLines("cards.txt");
+        if (File.Exists("cards.txt"))
+        {
+            contents = File.ReadAllLines("cards.txt");
+        }
+
     }
 }

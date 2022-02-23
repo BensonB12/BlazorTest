@@ -27,10 +27,9 @@
 }
 @foreach (var card in cards)
 {
-    <p>@card.Name: @card.ManaCost @if (card is Planeswalker)
+    <p>@card.Name: @card.ManaCost  @if (card is Planeswalker)
         { 
-            @card.Loyalty
-            ;
+            @card.Loyalty;
         }
     </p>
 }
@@ -39,18 +38,37 @@
 {
     protected override void OnInitialized()
     {
-        foreach (var line in File.ReadAllLines("cards.txt"))
+        if (File.Exists("cards.txt"))
         {
-            Card card;
-            if (line.Split(' ').Length > 2)
+            var cardName = "";
+            var manaCost = 0;
+            var loyalty = 0;
+            foreach (var line in File.ReadAllLines("cards.txt"))
             {
-                card = new Planeswalker(line, newManaCost, newLoyalty);
+                var parts = line.Split(' ');
+                Card card;
+                if(parts[0] == "Name")
+                {
+                    cardName = parts[1];
+                }
+                if(parts[0] == "Manacost")
+                {
+                    manaCost = int.Parse(parts[1]);
+                }
+                if(parts[0] == "Loyalty")
+                {
+                    loyalty = int.Parse(parts[1]);
+                }
+                if (parts.Length > 2)
+                {
+                    card = new Planeswalker(line, manaCost, loyalty);
+                }
+                else
+                {
+                    card = new CreatureCard(line, newManaCost);
+                }
+                cards.Add(card);
             }
-            else
-            {
-                card = new CreatureCard(line, newManaCost);
-            }
-            cards.Add(card);
         }
     }
     string newCardName;
@@ -99,13 +117,7 @@
         {
             foreach (var card in cards)
             {
-                writer.Write(card.Name + ": ");
-                writer.Write(card.ManaCost);
-                if (card is Planeswalker)
-                {
-                    writer.Write(" " + card.Loyalty);
-                }
-                writer.WriteLine();
+                card.Save(writer, card);
             }
             writer.Close();
         }

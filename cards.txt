@@ -1,3 +1,5 @@
-The Wandering Emperor: 4 0
-Ao, the Dawn Sky: 5
-Invoke Justice: 5
+Name: blue guy
+ManaCost: 3
+Name: green dude
+ManaCost: 4
+Loyalty: 2

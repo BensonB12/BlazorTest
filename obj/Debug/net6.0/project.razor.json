@@ -12,6 +12,39 @@
   "ProjectWorkspaceState": {
     "TagHelpers": [
       {
+        "HashCode": -2096376245,
+        "Kind": "Components.Component",
+        "Name": "blazorBank.Pages.Counter",
+        "AssemblyName": "blazorBank",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "Counter"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "blazorBank.Pages.Counter"
+        }
+      },
+      {
+        "HashCode": -1863476912,
+        "Kind": "Components.Component",
+        "Name": "blazorBank.Pages.Counter",
+        "AssemblyName": "blazorBank",
+        "CaseSensitive": true,
+        "TagMatchingRules": [
+          {
+            "TagName": "blazorBank.Pages.Counter"
+          }
+        ],
+        "Metadata": {
+          "Runtime.Name": "Components.IComponent",
+          "Common.TypeName": "blazorBank.Pages.Counter",
+          "Components.NameMatch": "Components.FullyQualifiedNameMatch"
+        }
+      },
+      {
         "HashCode": -1905420118,
         "Kind": "Components.Component",
         "Name": "blazorBank.Pages.FetchData",
